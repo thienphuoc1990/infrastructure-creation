@@ -1,4 +1,9 @@
 version: 2.1
+orbs:
+  # Choose either one of the orbs below
+  # Declare a dependency on the welcome-orb
+  # welcome: circleci/welcome-orb@0.4.1
+  aws-cli: circleci/aws-cli@2.0.3
 
 commands:
   # Exercise - Rollback
@@ -25,6 +30,7 @@ jobs:
                   --template-file template.yml \
                   --stack-name myStack-${CIRCLE_WORKFLOW_ID:0:5} \
                   --region us-east-1
+                return 1
           - destroy_environment  # Exercise: Config and Deployment
     configure_infrastructure: 
         docker:
@@ -59,13 +65,13 @@ jobs:
                 else
                   return 1
                 fi
-          - destroy_environment
+          # - destroy_environment
 
 workflows:
     myWorkflow:
       jobs:
         - create_infrastructure
         # - configure_infrastructure
-        - smoke_test:
-            requires:
-              - create_infrastructure
+        # - smoke_test:
+        #     requires:
+        #       - create_infrastructure
